@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+ 
+<title>Toodle Task</title>
+<link rel="stylesheet" href=
+"https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+	integrity=
+"sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+	crossorigin="anonymous">
+
+<script src=
+"https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+</script>
+<script src=
+"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js">
+</script>
+<script src=
+"https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
+</script>
+
+<script>
+	$(document).ready(function () {
+
+	// Denotes total number of rows
+	var rowIdx = 0;
+	var x = document.createElement("INPUT");
+	
+
+	// jQuery button click event to add a row
+	$('#addBtn').on('click', function () {
+
+		// Adding a row inside the tbody.
+		$('#tbody').append(`<tr id="R${++rowIdx}">
+			<td class="row-index text-center">
+			<p ><input type="text"></p>
+			</td>
+			<td class="text-center">
+				<button class="btn btn-danger remove"
+				type="button">Remove</button>
+				
+				<button class="btn btn-danger Indent"
+				type="button">Indent</button>
+
+				<button class="btn btn-danger Outdent"
+				type="button">Outdent</button>
+				<button onclick="upNdown('up');">&ShortUpArrow;</button>
+        		<button onclick="upNdown('down');">&ShortDownArrow;</button>
+				</td>
+			</tr>`);
+		
+	});
+
+	// jQuery button click event to remove a row.
+	$('#tbody').on('click', '.remove', function () {
+
+		// Getting all the rows next to the row
+		// containing the clicked button
+		var child = $(this).closest('tr').nextAll();
+
+		// Iterating across all the rows
+		// obtained to change the index
+		child.each(function () {
+
+		// Getting <tr> id.
+		var id = $(this).attr('id');
+
+		// Getting the <p> inside the .row-index class.
+		var idx = $(this).children('.row-index').children('p');
+
+		// Gets the row number from <tr> id.
+		var dig = parseInt(id.substring(1));
+
+		// Modifying row index.
+		idx.html(`Row ${dig - 1}`);
+
+		// Modifying row id.
+		$(this).attr('id', `R${dig - 1}`);
+		});
+
+		// Removing the current row.
+		$(this).closest('tr').remove();
+
+		// Decreasing total number of rows by 1.
+		rowIdx--;
+	});
+	//$('#tbody').on('click', '.Indent', function () {
+	//	p{ 
+	//		text-indent: 50px;
+	//	}
+	//});
+
+	});
+</script>
+<script>
+            
+            var index;  // variable to set the selected row index
+            function getSelectedRow()
+            {
+                var table = document.getElementById("table");
+                for(var i = 1; i < table.rows.length; i++)
+                {
+                    table.rows[i].onclick = function()
+                    {
+                        // clear the selected from the previous selected row
+                        // the first time index is undefined
+                        if(typeof index !== "undefined"){
+                            table.rows[index].classList.toggle("selected");
+                        }
+                       
+                        index = this.rowIndex;
+                        this.classList.toggle("selected");
+
+                    };
+                }
+                    
+            }
+  
+
+            getSelectedRow();
+            
+            
+            function upNdown(direction)
+            {
+                var rows = document.getElementById("table").rows,
+                    parent = rows[index].parentNode;
+                 if(direction === "up")
+                 {
+                     if(index > 1){
+                        parent.insertBefore(rows[index],rows[index - 1]);
+                        // when the row go up the index will be equal to index - 1
+                        index--;
+                    }
+                 }
+                 
+                 if(direction === "down")
+                 {
+                     if(index < rows.length -1){
+                        parent.insertBefore(rows[index + 1],rows[index]);
+                        // when the row go down the index will be equal to index + 1
+                        index++;
+                    }
+                 }
+            }
+            
+        </script>
+</head>
+
+<body background="C:\Users\ramne_\OneDrive\Desktop\New folder\bgimg1.png">
+	<h1 style="color:purple;text-align:center;">Subject Curriculum Tool</h1>
+<div class="container pt-4">
+	<div class="table-responsive">
+	<table class="table table-bordered">
+		<thead>
+		<tr>
+			<th class="text-center"><input type="text" placeholder="Enter Subject"></th>
+			<th class="text-center" style="color:purple;">Operations</th>
+		</tr>
+		</thead>
+		<tbody id="tbody">
+
+		</tbody>
+	</table>
+	</div>
+	<button class="btn btn-md btn-primary"
+	id="addBtn" type="button" style="background: purple;">
+		Add new Item
+	</button>
+	<button class="btn btn-md btn-primary"
+	id="addTable" type="button" style="background:purple;">
+		Add new Subject
+	</button>
+
+</body>
+
+</html>
